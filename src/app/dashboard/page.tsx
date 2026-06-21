@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { BalanceCards } from "./_components/balance-cards";
 
 export const metadata: Metadata = {
-  title: "Fina - Dashboard",
+  title: "Naro - Dashboard",
   description: "Your personal financial dashboard",
 };
 
