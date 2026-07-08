@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerClose,
@@ -10,33 +10,33 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { handleChat, handleChatStreaming } from "@/features/ai/chat";
-import { cn } from "@/lib/utils";
-import { BotIcon, ChevronDownIcon, EllipsisIcon, XIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import ChatbotTextarea from "./chatbot-textarea";
-import { useMutation } from "@tanstack/react-query";
-import Markdown from "react-markdown";
+} from '@/components/ui/drawer';
+import { handleChat, handleChatStreaming } from '@/features/ai/chat';
+import { cn } from '@/lib/utils';
+import { BotIcon, ChevronDownIcon, EllipsisIcon, XIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import ChatbotTextarea from './chatbot-textarea';
+import { useMutation } from '@tanstack/react-query';
+import Markdown from 'react-markdown';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Conversation } from "@/app/types/ai";
+} from '@/components/ui/collapsible';
+import { Conversation } from '@/app/types/ai';
 
 export default function ChatbotDrawer() {
   const chatRef = useRef<HTMLDivElement>(null);
   const [conversation, setConversation] = useState<Conversation[]>([]);
   const [isThinking, setIsThinking] = useState<boolean>(false);
-  const [mode, setMode] = useState<"general" | "personal">("general");
+  const [mode, setMode] = useState<'general' | 'personal'>('general');
 
   const { mutate: handleChatMutation, isPending } = useMutation({
     mutationFn: async ({ isThinking }: { isThinking: boolean }) => {
       if (isThinking) {
         setConversation((prev) => [
           ...prev,
-          { role: "model", parts: [{ thought: true, text: "" }, { text: "" }] },
+          { role: 'model', parts: [{ thought: true, text: '' }, { text: '' }] },
         ]);
         const response = await handleChatStreaming(
           conversation,
@@ -55,12 +55,12 @@ export default function ChatbotDrawer() {
               parts: [
                 {
                   ...parts[0],
-                  text: chunk.startsWith("[thought]")
-                    ? parts[0].text + chunk.replace("[thought]", "")
+                  text: chunk.startsWith('[thought]')
+                    ? parts[0].text + chunk.replace('[thought]', '')
                     : parts[0].text,
                 },
                 {
-                  text: !chunk.startsWith("[thought]")
+                  text: !chunk.startsWith('[thought]')
                     ? parts[1].text + chunk
                     : parts[1].text,
                 },
@@ -73,7 +73,7 @@ export default function ChatbotDrawer() {
       } else {
         setConversation((prev) => [
           ...prev,
-          { role: "model", parts: [{ text: "" }] },
+          { role: 'model', parts: [{ text: '' }] },
         ]);
         const response = await handleChatStreaming(
           conversation,
@@ -99,8 +99,8 @@ export default function ChatbotDrawer() {
     },
     onError: (error) => {
       const botMessage = {
-        role: "model",
-        parts: [{ text: "Terjadi kesalahan: " + error.message }],
+        role: 'model',
+        parts: [{ text: 'Terjadi kesalahan: ' + error.message }],
       };
       setConversation((prev) => [...prev, botMessage]);
     },
@@ -108,7 +108,7 @@ export default function ChatbotDrawer() {
 
   function sendMessage(message: string) {
     const newMessage = {
-      role: "user",
+      role: 'user',
       parts: [{ text: message }],
     };
     setConversation((prev) => [...prev, newMessage]);
@@ -119,7 +119,7 @@ export default function ChatbotDrawer() {
     if (chatRef.current) {
       chatRef.current?.scrollTo({
         top: chatRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   }, [conversation]);
@@ -161,23 +161,23 @@ export default function ChatbotDrawer() {
                 <div
                   key={`conversation-${index}`}
                   className={cn(
-                    "flex flex-col gap-2",
-                    message.role === "model" ? "items-start" : "items-end",
+                    'flex flex-col gap-2',
+                    message.role === 'model' ? 'items-start' : 'items-end',
                   )}
                 >
                   <div
-                    className={cn("flex flex-col w-full", {
-                      "bg-primary/20 text-primary px-5 py-2 rounded-3xl rounded-br-md w-fit max-w-3/4":
-                        message.role === "user",
+                    className={cn('flex flex-col w-full', {
+                      'bg-primary/20 text-primary px-5 py-2 rounded-3xl rounded-br-md w-fit max-w-3/4':
+                        message.role === 'user',
                     })}
                   >
-                    {message.role === "model" && (
+                    {message.role === 'model' && (
                       <div className="flex items-center gap-1 text-xs font-semibold text-primary">
                         <BotIcon />
                         AI Advisor
                       </div>
                     )}
-                    {message.role === "model" ? (
+                    {message.role === 'model' ? (
                       <div className="response-ai">
                         {message.parts.map((part, indexPart) => (
                           <div key={`response-ai-${index}-${indexPart}`}>
@@ -208,7 +208,7 @@ export default function ChatbotDrawer() {
                 </div>
               ))}
               {isPending && (
-                <div className="flex items-center animate-pulse">
+                <div className="flex items-center animate-pulse -mt-8">
                   <EllipsisIcon className="size-8 text-primary/50" />
                 </div>
               )}
